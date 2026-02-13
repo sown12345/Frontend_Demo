@@ -1,0 +1,66 @@
+@dark-start: #141e30;
+@dark-end: #243b55;
+@primary-color: #1677ff;
+
+.container {
+    min-height: 100vh;
+    width: 100%;
+    padding: 60px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-image: linear-gradient(to right, #12010b, #241322, #341f3a, #402e56, #443f75, #405994, #3173b1, #008fcb, #00b5d6, #00d6ba, #80ef88, #fafb5f);
+}
+
+.card {
+    width: 440px;
+    padding: 40px 45px;
+
+    border-radius: 20px !important;
+    background: #ffffff;
+
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.2);
+
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.button {
+    height: 46px;
+    font-weight: 600;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+:global {
+
+    .ant-input,
+    .ant-input-affix-wrapper {
+        height: 42px !important;
+        border-radius: 12px !important;
+    }
+
+    .ant-input:focus,
+    .ant-input-affix-wrapper-focused {
+        border-color: @primary-color !important;
+        box-shadow: 0 0 0 3px fade(@primary-color, 25%) !important;
+    }
+
+    .ant-form-item {
+        margin-bottom: 20px;
+    }
+}
