@@ -1,22 +1,23 @@
 import { message } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '@/features/userSlice';
 import { history } from 'umi';
+import { RegisterRequest, RootState } from '@/types';
+import { AppDispatch } from '@/store';
 import RegisterForm from '@/components/register/RegisterForm';
 
 export default function Register() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const { isLoading } = useSelector((state: RootState) => state.user);
 
-    const onFinish = async (values: any) => {
-        const result: any = await dispatch(register(values));
+    const onFinish = async (values: RegisterRequest) => {
+        const result = await dispatch(register(values));
 
         if (register.fulfilled.match(result)) {
             message.success('Đăng ký thành công');
             history.push('/login');
-        } else {
-            message.error(result.payload as string);
         }
     };
 
-    return <RegisterForm onSubmit={onFinish} />;
+    return <RegisterForm onSubmit={onFinish} loading={isLoading} />;
 }

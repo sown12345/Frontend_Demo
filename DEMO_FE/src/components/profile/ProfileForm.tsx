@@ -1,17 +1,19 @@
 import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { UpdateProfileRequest, User } from '@/types';
 
 interface ProfileFormProps {
-    onSubmit: (values: any) => Promise<void>;
-    initialValues?: any;
+    onSubmit: (values: UpdateProfileRequest) => Promise<void>;
+    initialValues?: Partial<User>;
     loading?: boolean;
 }
 
 export default function ProfileForm({ onSubmit, initialValues, loading = false }: ProfileFormProps) {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<Partial<User>>();
 
-    const handleSubmit = async (values: any) => {
-        const { _id, role, createdAt, updatedAt, username, ...updateData } = values;
-        await onSubmit(updateData);
+    const handleSubmit = async (values: Partial<User>) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id, role, createdAt, updatedAt, username, avatar, ...updateData } = values;
+        await onSubmit(updateData as UpdateProfileRequest);
     };
 
     return (

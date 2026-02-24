@@ -1,27 +1,29 @@
-import axios from 'axios';
+import { AxiosResponse } from 'axios';
+import { publicAPI, privateAPI } from '@/utils/axiosInstance';
+import {
+    LoginRequest,
+    RegisterRequest,
+    UpdateProfileRequest,
+    ApiResponse,
+    User
+} from '@/types';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+export const registerAPI = (data: RegisterRequest): Promise<AxiosResponse<ApiResponse<User>>> =>
+    publicAPI.post('/register', data);
 
-export const registerAPI = (data: any) =>
-    axios.post(`${API}/register`, data);
+export const loginAPI = (data: LoginRequest): Promise<AxiosResponse<ApiResponse<{ token: string }>>> =>
+    publicAPI.post('/login', data);
 
-export const loginAPI = (data: any) =>
-    axios.post(`${API}/login`, data);
+export const getProfileAPI = (): Promise<AxiosResponse<ApiResponse<User>>> =>
+    privateAPI.get('/profile');
 
-export const getProfileAPI = (token: string) =>
-    axios.get(`${API}/profile`, {
-        headers: { Authorization: token },
-    });
+export const updateProfileAPI = (data: UpdateProfileRequest): Promise<AxiosResponse<ApiResponse<User>>> =>
+    privateAPI.put('/profile', data);
 
-export const updateProfileAPI = (token: string, data: any) =>
-    axios.put(`${API}/profile`, data, {
-        headers: { Authorization: token },
-    });
-
-export const uploadAvatarAPI = (token: string, formData: FormData) =>
-    axios.put(`${API}/avatar`, formData, {
+export const uploadAvatarAPI = (formData: FormData): Promise<AxiosResponse<ApiResponse<User>>> =>
+    privateAPI.put('/avatar', formData, {
         headers: {
-            Authorization: token,
             'Content-Type': 'multipart/form-data',
         },
     });
+

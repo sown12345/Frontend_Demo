@@ -4,11 +4,14 @@ const { HTTP_STATUS, ERROR_MESSAGES } = require('../constants');
 
 module.exports = (req, res, next) => {
     try {
-        const token = req.headers.authorization;
+        const auth = req.headers.authorization;
 
-        if (!token) {
+        if (!auth) {
             return sendError(res, HTTP_STATUS.UNAUTHORIZED, ERROR_MESSAGES.UNAUTHORIZED);
         }
+
+        // Extract token từ "Bearer <token>"
+        const token = auth.startsWith('Bearer ') ? auth.slice(7) : auth;
 
         const decoded = jwt.verify(
             token,

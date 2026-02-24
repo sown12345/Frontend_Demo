@@ -1,17 +1,18 @@
 import { Form, Input, Button, Card } from 'antd';
 import { ReactNode } from 'react';
+import { LoginRequest } from '@/types';
 import styles from './LoginForm.less';
 
 interface LoginFormProps {
-    onSubmit: (values: any) => Promise<void>;
+    onSubmit: (values: LoginRequest) => Promise<void>;
     loading?: boolean;
     children?: ReactNode;
 }
 
 export default function LoginForm({ onSubmit, loading = false, children }: LoginFormProps) {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<LoginRequest>();
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: LoginRequest) => {
         await onSubmit(values);
     };
 

@@ -1,17 +1,18 @@
 import { Form, Input, Button, Select, Card } from 'antd';
 import { ReactNode } from 'react';
+import { RegisterRequest } from '@/types';
 import styles from './RegisterForm.less';
 
 interface RegisterFormProps {
-    onSubmit: (values: any) => Promise<void>;
+    onSubmit: (values: RegisterRequest) => Promise<void>;
     loading?: boolean;
     children?: ReactNode;
 }
 
 export default function RegisterForm({ onSubmit, loading = false, children }: RegisterFormProps) {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<RegisterRequest>();
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: RegisterRequest) => {
         await onSubmit(values);
     };
 

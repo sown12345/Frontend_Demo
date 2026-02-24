@@ -1,5 +1,6 @@
 import { Button, Avatar, Upload, Image, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { RcFile } from 'antd/es/upload';
 import { useState } from 'react';
 import styles from './AvatarUploader.less';
 
@@ -13,7 +14,7 @@ export default function AvatarUploader({ avatar, onUpload, loading = false }: Av
     const [preview, setPreview] = useState(false);
     const [uploading, setUploading] = useState(false);
 
-    const handleUpload = async (file: any) => {
+    const handleUpload = async (file: RcFile) => {
         if (!file.type.startsWith('image/')) {
             message.error('Chỉ được tải lên file ảnh');
             return Upload.LIST_IGNORE;
@@ -30,8 +31,9 @@ export default function AvatarUploader({ avatar, onUpload, loading = false }: Av
             formData.append('avatar', file);
             await onUpload(formData);
             message.success('Cập nhật ảnh đại diện thành công');
-        } catch (error: any) {
-            message.error(error.message || 'Tải ảnh thất bại');
+        } catch (error) {
+            const err = error as Error;
+            message.error(err.message || 'Tải ảnh thất bại');
         } finally {
             setUploading(false);
         }

@@ -1,16 +1,17 @@
 import { Card, message, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile, updateProfile, uploadAvatar } from '@/features/userSlice';
 import { history } from 'umi';
+import { RootState, UpdateProfileRequest, User } from '@/types';
+import { AppDispatch } from '@/store';
 import AvatarUploader from '@/components/avatar/AvatarUploader';
 import ProfileForm from '@/components/profile/ProfileForm';
 import styles from './index.less';
 
 export default function Profile() {
-    const dispatch = useDispatch();
-    const { profile, token } = useSelector((s: any) => s.user);
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
+    const { profile, token, isLoading } = useSelector((state: RootState) => state.user);
 
     // Kiểm tra đăng nhập + load profile
     useEffect(() => {
@@ -22,11 +23,11 @@ export default function Profile() {
     }, [token, dispatch]);
 
     // Format profile data
-    const formattedProfile = profile ? {
+    const formattedProfile: Partial<User> | undefined = profile ? {
         ...profile,
         createdAt: new Date(profile.createdAt).toLocaleString(),
         updatedAt: new Date(profile.updatedAt).toLocaleString(),
-    } : null;
+    } : undefined;
 
     // Loading khi chưa có profile
     if (!profile) {
@@ -39,33 +40,19 @@ export default function Profile() {
 
     // Handle avatar upload
     const handleUpload = async (formData: FormData) => {
-        try {
-            setLoading(true);
-            const result: any = await dispatch(uploadAvatar(formData));
+        const result = await dispatch(uploadAvatar(formData));
 
-            if (uploadAvatar.fulfilled.match(result)) {
-                message.success('Cập nhật ảnh đại diện thành công');
-            } else {
-                throw new Error(result.payload || 'Tải ảnh thất bại');
-            }
-        } finally {
-            setLoading(false);
+        if (uploadAvatar.fulfilled.match(result)) {
+            message.success('Cập nhật ảnh đại diện thành công');
         }
     };
 
     // Handle profile update
-    const onFinish = async (values: any) => {
-        try {
-            setLoading(true);
-            const result: any = await dispatch(updateProfile(values));
+    const onFinish = async (values: UpdateProfileRequest) => {
+        const result = await dispatch(updateProfile(values));
 
-            if (updateProfile.fulfilled.match(result)) {
-                message.success('Cập nhật thông tin thành công');
-            } else {
-                throw new Error(result.payload as string);
-            }
-        } finally {
-            setLoading(false);
+        if (updateProfile.fulfilled.match(result)) {
+            message.success('Cập nhật thông tin thành công');
         }
     };
 
@@ -78,13 +65,13 @@ export default function Profile() {
                     {/* Left Column - Avatar */}
                     <div className={styles.leftCol}>
                         <div className={styles.avatarWrapper}>
-                            <AvatarUploader avatar={profile.avatar} onUpload={handleUpload} loading={loading} />
+                            <AvatarUploader avatar={profile.avatar} onUpload={handleUpload} loading={isLoading} />
                         </div>
                     </div>
 
                     {/* Right Column - Form */}
                     <div className={styles.rightCol}>
-                        <ProfileForm onSubmit={onFinish} initialValues={formattedProfile} loading={loading} />
+                        <ProfileForm onSubmit={onFinish} initialValues={formattedProfile} loading={isLoading} />
                     </div>
                 </div>
             </Card>
