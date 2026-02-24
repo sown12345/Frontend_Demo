@@ -22,8 +22,10 @@ export const login = createAsyncThunk(
     async (data: any, { rejectWithValue }) => {
         try {
             const res = await api.loginAPI(data);
-            localStorage.setItem('token', res.data.token);
-            return res.data.token;
+            // backend wraps payload as { status, message, data }
+            const token = res.data?.data?.token;
+            localStorage.setItem('token', token);
+            return token;
         } catch (err: any) {
             return rejectWithValue(
                 err.response?.data?.message || 'Login failed'
@@ -39,7 +41,7 @@ export const fetchProfile = createAsyncThunk(
         try {
             const token = getState().user.token;
             const res = await api.getProfileAPI(token);
-            return res.data;
+            return res.data?.data;
         } catch {
             return rejectWithValue('Fetch profile failed');
         }
@@ -53,7 +55,7 @@ export const updateProfile = createAsyncThunk(
         try {
             const token = getState().user.token;
             const res = await api.updateProfileAPI(token, data);
-            return res.data;
+            return res.data?.data;
         } catch {
             return rejectWithValue('Update failed');
         }
@@ -67,7 +69,7 @@ export const uploadAvatar = createAsyncThunk(
         try {
             const token = getState().user.token;
             const res = await api.uploadAvatarAPI(token, formData);
-            return res.data;
+            return res.data?.data;
         } catch (err: any) {
             return rejectWithValue(
                 err.response?.data?.message || 'Upload avatar failed'

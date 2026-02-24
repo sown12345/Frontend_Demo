@@ -1,95 +1,6 @@
 @primary-color: #5b8cff;
 @accent-color: #8a63d2;
 
-.container {
-    min-height: 100vh;
-    width: 100%;
-    padding: 60px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, #071028 0%, #08172b 50%, #061028 100%);
-}
-
-.card {
-    width: 100%;
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 28px;
-    border-radius: 16px !important;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover {
-    transform: translateY(-6px);
-}
-
-.title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-align: left;
-    color: #eef2ff;
-}
-
-.profileGrid {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-}
-
-.leftCol {
-    width: 260px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.avatarWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    padding: 12px;
-    border-radius: 14px;
-    background: linear-gradient(180deg, rgba(91, 140, 255, 0.06), rgba(138, 99, 210, 0.03));
-}
-
-.avatarBox {
-    padding: 6px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, @primary-color, @accent-color);
-}
-
-.meta {
-    color: rgba(230, 238, 248, 0.9);
-    font-weight: 600;
-}
-
-.rightCol {
-    flex: 1 1 0%;
-}
-
-.infoRow {
-    display: flex;
-    gap: 12px;
-}
-
-.button {
-    height: 46px;
-    font-weight: 700;
-    border-radius: 12px;
-    margin-top: 16px;
-    font-size: 15px;
-    background-image: linear-gradient(90deg, @primary-color 0%, @accent-color 100%);
-    color: #fff;
-    border: none;
-}
-
 :global {
     .ant-form-item {
         margin-bottom: 16px;
@@ -202,49 +113,9 @@
     .ant-select-arrow {
         color: rgba(230, 238, 248, 0.5) !important;
     }
-}
 
-@media (max-width: 860px) {
-    .profileGrid {
-        flex-direction: column;
-    }
-
-    .leftCol {
-        width: 100%;
-        align-items: center;
-    }
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 40px 16px;
-    }
-
-    .card {
-        max-width: 100%;
-        padding: 20px;
-        border-radius: 12px !important;
-    }
-
-    .title {
-        font-size: 20px;
-        margin-bottom: 16px;
-    }
-
-    .profileGrid {
-        gap: 20px;
-    }
-
-    .leftCol {
-        width: 100%;
-    }
-
-    .avatarWrapper {
-        gap: 12px;
-        padding: 10px;
-    }
-
-    :global {
+    /* Responsive */
+    @media (max-width: 600px) {
         .ant-form-item {
             margin-bottom: 14px;
         }
@@ -259,22 +130,8 @@
             font-size: 13px !important;
         }
     }
-}
 
-@media (max-width: 400px) {
-    .container {
-        padding: 30px 12px;
-    }
-
-    .card {
-        padding: 16px;
-    }
-
-    .title {
-        font-size: 18px;
-    }
-
-    :global {
+    @media (max-width: 400px) {
 
         .ant-input,
         .ant-select-selector {

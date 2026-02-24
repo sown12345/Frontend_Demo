@@ -1,0 +1,141 @@
+@primary-color: #5b8cff;
+@accent-color: #8a63d2;
+
+.container {
+    min-height: 100vh;
+    width: 100%;
+    padding: 80px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(135deg, #071028 0%, #071a3a 50%, #072033 100%);
+}
+
+.card {
+    width: 520px;
+    padding: 40px 46px;
+
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 60px rgba(2, 6, 23, 0.6);
+}
+
+.title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #eef2ff;
+    margin-bottom: 26px;
+}
+
+.button {
+    height: 48px;
+    font-weight: 700;
+    border-radius: 12px;
+    font-size: 15px;
+    background-image: linear-gradient(90deg, @primary-color 0%, @accent-color 100%);
+    color: #fff;
+    border: none;
+}
+
+:global {
+
+    .ant-input,
+    .ant-input-password,
+    .ant-select-selector {
+        height: 44px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        color: #e6eef8;
+        width: 100% !important;
+    }
+
+    .ant-input::placeholder,
+    .ant-input-password::placeholder {
+        color: rgba(230, 238, 248, 0.5);
+    }
+
+    .ant-input:focus,
+    .ant-input-password:focus,
+    .ant-select-focused .ant-select-selector {
+        border-color: @primary-color !important;
+        box-shadow: 0 6px 20px rgba(91, 140, 255, 0.12) !important;
+    }
+
+    .ant-form-item {
+        margin-bottom: 18px;
+    }
+
+    .ant-input-affix-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .ant-input-affix-wrapper .ant-input {
+        padding-right: 44px;
+    }
+
+    .ant-input-affix-wrapper {
+        position: relative;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center;
+        padding: 0 !important;
+    }
+
+    .ant-input-affix-wrapper .ant-input {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        padding-right: 48px !important;
+        display: block !important;
+    }
+
+    .ant-input-suffix,
+    .ant-input-affix-wrapper .ant-input-suffix {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: auto;
+    }
+
+    /* ensure form controls take full width */
+    .ant-form-item-control,
+    .ant-form-item-control-input,
+    .ant-form-item-control-input-content {
+        width: 100% !important;
+    }
+
+    .ant-input-suffix,
+    .ant-input-affix-wrapper .ant-input-suffix {
+        right: 12px;
+    }
+
+    /* make affix wrapper full width so input covers entire form width */
+    .ant-input-affix-wrapper {
+        width: 100% !important;
+    }
+
+    .ant-form-item-control-input-content>.ant-input-affix-wrapper {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        padding: 26px 18px;
+    }
+}

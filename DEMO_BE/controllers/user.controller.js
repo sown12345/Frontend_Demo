@@ -1,83 +1,53 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const userService = require('../services/user.service');
+const { sendSuccess, sendError } = require('../utils/response');
+const { HTTP_STATUS, SUCCESS_MESSAGES } = require('../constants');
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, fullName } = req.body;
-
-        const exists = await User.findOne({ $or: [{ username }, { email }] });
-        if (exists)
-            return res.status(400).json({ message: 'User already exists' });
-
-        const hashed = await bcrypt.hash(password, 10);
-
-        await User.create({
-            username,
-            email,
-            password: hashed,
-            fullName,
-        });
-
-        res.status(201).json({ message: 'Register success' });
+        const result = await userService.register(req.body);
+        sendSuccess(res, HTTP_STATUS.CREATED, SUCCESS_MESSAGES.REGISTER_SUCCESS);
     } catch (err) {
-        res.status(500).json({ message: 'Server error' });
+        const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
+        sendError(res, status, err.message);
     }
 };
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-
-        const user = await User.findOne({ username });
-        if (!user)
-            return res.status(400).json({ message: 'User not found' });
-
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid)
-            return res.status(400).json({ message: 'Wrong password' });
-
-        const token = jwt.sign(
-            { id: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
-        res.json({ token });
-    } catch {
-        res.status(500).json({ message: 'Server error' });
+        const result = await userService.login(req.body);
+        sendSuccess(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.LOGIN_SUCCESS, result);
+    } catch (err) {
+        const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
+        sendError(res, status, err.message);
     }
 };
 
 exports.getProfile = async (req, res) => {
-    const user = await User.findById(req.userId).select('-password');
-    res.json(user);
+    try {
+        const user = await userService.getProfile(req.userId);
+        sendSuccess(res, HTTP_STATUS.OK, 'Get profile success', user);
+    } catch (err) {
+        const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
+        sendError(res, status, err.message);
+    }
 };
 
 exports.updateProfile = async (req, res) => {
-    const updated = await User.findByIdAndUpdate(
-        req.userId,
-        req.body,
-        { new: true }
-    ).select('-password');
-
-    res.json(updated);
+    try {
+        const user = await userService.updateProfile(req.userId, req.body);
+        sendSuccess(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.UPDATE_SUCCESS, user);
+    } catch (err) {
+        const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
+        sendError(res, status, err.message);
+    }
 };
 
 exports.uploadAvatar = async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: 'Không có file upload' });
-        }
-
-        const user = await User.findByIdAndUpdate(
-            req.userId,
-            { avatar: req.file.filename },
-            { new: true }
-        );
-
-        res.json(user);
+        const user = await userService.uploadAvatar(req.userId, req.file?.filename);
+        sendSuccess(res, HTTP_STATUS.OK, SUCCESS_MESSAGES.UPLOAD_SUCCESS, user);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
+        sendError(res, status, err.message);
     }
 };

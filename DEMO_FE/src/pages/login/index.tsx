@@ -1,8 +1,8 @@
-import { Form, Input, Button, Card, message } from 'antd';
+import { message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { login } from '@/features/userSlice';
 import { history } from 'umi';
-import styles from './index.less';
+import LoginForm from '@/components/login/LoginForm';
 
 export default function Login() {
     const dispatch = useDispatch();
@@ -18,38 +18,5 @@ export default function Login() {
         }
     };
 
-    return (
-        <div className={styles.container}>
-            <Card className={styles.card}>
-                <div className={styles.title}>Đăng nhập</div>
-
-                <Form layout="vertical" onFinish={onFinish}>
-                    <Form.Item
-                        name="username"
-                        label="Tên đăng nhập"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        label="Mật khẩu"
-                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        block
-                        className={styles.button}
-                    >
-                        Đăng nhập
-                    </Button>
-                </Form>
-            </Card>
-        </div>
-    );
+    return <LoginForm onSubmit={onFinish} />;
 }

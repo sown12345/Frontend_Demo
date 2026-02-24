@@ -1,12 +1,15 @@
 const jwt = require('jsonwebtoken');
+const { sendError } = require('../utils/response');
+const { HTTP_STATUS, ERROR_MESSAGES } = require('../constants');
 
 module.exports = (req, res, next) => {
-    const token = req.headers.authorization;
-
-    if (!token)
-        return res.status(401).json({ message: 'Unauthorized' });
-
     try {
+        const token = req.headers.authorization;
+
+        if (!token) {
+            return sendError(res, HTTP_STATUS.UNAUTHORIZED, ERROR_MESSAGES.UNAUTHORIZED);
+        }
+
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
@@ -14,7 +17,10 @@ module.exports = (req, res, next) => {
 
         req.userId = decoded.id;
         next();
-    } catch {
-        return res.status(403).json({ message: 'Invalid token' });
+    } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            return sendError(res, HTTP_STATUS.UNAUTHORIZED, 'Token expired');
+        }
+        return sendError(res, HTTP_STATUS.FORBIDDEN, ERROR_MESSAGES.INVALID_TOKEN);
     }
 };
