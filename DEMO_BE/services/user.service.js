@@ -15,7 +15,7 @@ exports.register = async (data) => {
         };
     }
 
-    const { username, email, password, fullName } = data;
+    const { username, email, password, fullName, phone, gender, address } = data;
 
     // Check if user already exists
     const exists = await User.findOne({ $or: [{ username }, { email }] });
@@ -30,14 +30,32 @@ exports.register = async (data) => {
     const hashed = await bcrypt.hash(password, 10);
 
     // Create new user
-    await User.create({
+    const createdUser = await User.create({
         username,
         email,
         password: hashed,
         fullName,
+        phone,
+        gender,
+        address,
     });
 
-    return { message: SUCCESS_MESSAGES.REGISTER_SUCCESS };
+    return {
+        message: SUCCESS_MESSAGES.REGISTER_SUCCESS,
+        user: {
+            _id: createdUser._id,
+            username: createdUser.username,
+            email: createdUser.email,
+            fullName: createdUser.fullName,
+            phone: createdUser.phone,
+            gender: createdUser.gender,
+            address: createdUser.address,
+            role: createdUser.role,
+            avatar: createdUser.avatar,
+            createdAt: createdUser.createdAt,
+            updatedAt: createdUser.updatedAt,
+        },
+    };
 };
 
 // LOGIN

@@ -5,7 +5,7 @@ const { HTTP_STATUS, SUCCESS_MESSAGES } = require('../constants');
 exports.register = async (req, res) => {
     try {
         const result = await userService.register(req.body);
-        sendSuccess(res, HTTP_STATUS.CREATED, SUCCESS_MESSAGES.REGISTER_SUCCESS);
+        sendSuccess(res, HTTP_STATUS.CREATED, SUCCESS_MESSAGES.REGISTER_SUCCESS, result.user);
     } catch (err) {
         const status = err.status || HTTP_STATUS.INTERNAL_ERROR;
         sendError(res, status, err.message);
