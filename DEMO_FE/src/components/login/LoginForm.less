@@ -1,58 +1,42 @@
-@primary-color: #5b8cff;
-@accent-color: #8a63d2;
+@import '../../styles/tokens.less';
 
-/* ===============================
-   LAYOUT
-=============================== */
+@primary-color: @color-primary;
+@accent-color: @color-accent;
 
 .container {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     width: 100%;
-    padding: 60px 20px;
-
+    padding: 40px 16px;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background: linear-gradient(135deg,
-            #0f172a 0%,
-            #0b1f3a 50%,
-            #082033 100%);
+    background: linear-gradient(180deg, @color-bg-dark-start 0%, @color-bg-dark-middle 50%, @color-bg-dark-end 100%);
 }
-
-/* ===============================
-   CARD
-=============================== */
 
 .card {
-    width: 440px;
-    padding: 36px 42px;
-
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 460px;
+    padding: 30px 26px;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(8px);
-
-    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.38);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-
-    &:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.6);
-    }
 }
 
-/* TITLE */
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 46px rgba(2, 6, 23, 0.45);
+}
 
 .title {
     text-align: center;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    color: #eef2ff;
-    margin-bottom: 26px;
+    color: @color-text-light;
+    margin-bottom: 22px;
 }
-
-/*BUTTON*/
 
 .button {
     height: 48px;
@@ -68,57 +52,122 @@
     color: #fff;
 }
 
-/* ===============================
-   ANT DESIGN OVERRIDE (SAFE)
-=============================== */
-
 :global {
-
-    .ant-form,
-    .ant-form-item,
-    .ant-form-item-control,
-    .ant-form-item-control-input,
-    .ant-form-item-control-input-content {
-        width: 100%;
+    .ant-form-item {
+        margin-bottom: 16px;
     }
 
-    /* Input & Password wrapper */
+    .ant-form-item-label>label {
+        color: rgba(230, 238, 248, 0.94);
+        font-weight: 600;
+    }
+
     .ant-input {
-        width: 100%;
-        height: 44px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        color: #e6eef8;
+        width: 100% !important;
+        height: 44px !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        color: rgba(230, 238, 248, 0.92) !important;
+        padding: 0 12px !important;
     }
-
 
     .ant-input-affix-wrapper {
         width: 100%;
-        padding: 0;
-        height: 44px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        color: #e6eef8;
+        padding: 0 12px !important;
+        height: 44px !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        color: rgba(230, 238, 248, 0.92) !important;
+    }
+
+    .ant-input-affix-wrapper .ant-input {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        height: auto !important;
+        box-shadow: none !important;
+    }
+
+    .ant-input-affix-wrapper:hover,
+    .ant-input-affix-wrapper-focused,
+    .ant-input:hover {
+        border-color: @primary-color !important;
     }
 
     .ant-input::placeholder {
         color: rgba(230, 238, 248, 0.5);
     }
 
-    /* Focus */
     .ant-input:focus,
     .ant-input-affix-wrapper-focused {
-        border-color: @primary-color;
-        box-shadow: 0 6px 20px rgba(91, 140, 255, 0.15);
+        border-color: @primary-color !important;
+        box-shadow: 0 6px 20px rgba(91, 140, 255, 0.12) !important;
     }
 
-    .ant-form-item {
-        margin-bottom: 18px;
+    .ant-input-affix-wrapper .ant-input-suffix,
+    .ant-input-password-icon {
+        color: rgba(230, 238, 248, 0.72);
     }
 
-    .ant-form-item-label>label {
-        color: rgba(230, 238, 248, 0.9);
+    .ant-input:-webkit-autofill,
+    .ant-input:-webkit-autofill:hover,
+    .ant-input:-webkit-autofill:focus,
+    .ant-input-affix-wrapper input:-webkit-autofill,
+    .ant-input-affix-wrapper input:-webkit-autofill:hover,
+    .ant-input-affix-wrapper input:-webkit-autofill:focus {
+        -webkit-text-fill-color: rgba(230, 238, 248, 0.92) !important;
+        transition: background-color 99999s ease-in-out 0s;
+        -webkit-box-shadow: 0 0 0px 1000px rgba(7, 16, 40, 0.35) inset !important;
+        box-shadow: 0 0 0px 1000px rgba(7, 16, 40, 0.35) inset !important;
+        caret-color: rgba(230, 238, 248, 0.92) !important;
+    }
+
+    .ant-form,
+    .ant-form-item,
+    .ant-form-item-control,
+    .ant-form-item-control-input,
+    .ant-form-item-control-input-content {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: @bp-tablet-sm-min) and (max-width: @bp-tablet-lg-max) {
+    .card {
+        max-width: 430px;
+        padding: 26px 22px;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: @bp-mobile-max) {
+    .container {
+        min-height: calc(100vh - 56px);
+        padding: 14px 10px;
+        align-items: center;
+    }
+
+    .card {
+        max-width: 390px;
+        padding: 16px 12px;
+        border-radius: 12px !important;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+
+    :global {
+
+        .ant-input,
+        .ant-input-affix-wrapper {
+            height: 40px !important;
+            font-size: 14px !important;
+        }
     }
 }

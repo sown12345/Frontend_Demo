@@ -1,5 +1,6 @@
 import { Form, Input, Button, Select, Row, Col } from 'antd';
 import { UpdateProfileRequest, User } from '@/types';
+import styles from './ProfileForm.less';
 
 interface ProfileFormProps {
     onSubmit: (values: UpdateProfileRequest) => Promise<void>;
@@ -17,7 +18,7 @@ export default function ProfileForm({ onSubmit, initialValues, loading = false }
     };
 
     return (
-        <Form layout="vertical" form={form} onFinish={handleSubmit} initialValues={initialValues}>
+        <Form className={styles.form} layout="vertical" form={form} onFinish={handleSubmit} initialValues={initialValues}>
             <Form.Item name="username" label="Tên đăng nhập">
                 <Input disabled />
             </Form.Item>
@@ -48,19 +49,18 @@ export default function ProfileForm({ onSubmit, initialValues, loading = false }
             <Row gutter={16}>
                 <Col xs={24} sm={12}>
                     <Form.Item name="gender" label="Giới tính">
-                        <Select allowClear>
+                        <Select allowClear dropdownClassName={styles.selectDropdown}>
                             <Select.Option value="male">Nam</Select.Option>
                             <Select.Option value="female">Nữ</Select.Option>
                             <Select.Option value="other">Khác</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col xs={24} sm={12}>
-                    <Form.Item name="address" label="Địa chỉ">
-                        <Input />
-                    </Form.Item>
-                </Col>
             </Row>
+
+            <Form.Item name="address" label="Địa chỉ">
+                <Input />
+            </Form.Item>
 
             <Form.Item name="createdAt" label="Ngày tạo">
                 <Input disabled />
@@ -70,7 +70,7 @@ export default function ProfileForm({ onSubmit, initialValues, loading = false }
                 <Input disabled />
             </Form.Item>
 
-            <Button type="primary" htmlType="submit" block loading={loading} size="large">
+            <Button type="primary" htmlType="submit" block loading={loading} disabled={loading} size="large">
                 Cập nhật hồ sơ
             </Button>
         </Form>

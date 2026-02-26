@@ -1,42 +1,41 @@
-@primary-color: #5b8cff;
-@accent-color: #8a63d2;
+@import '../../styles/tokens.less';
+
+@primary-color: @color-primary;
+@accent-color: @color-accent;
 
 .container {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     width: 100%;
-    padding: 80px 20px;
-
+    padding: 40px 16px;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background: linear-gradient(135deg, #071028 0%, #071a3a 50%, #072033 100%);
+    background: linear-gradient(180deg, @color-bg-dark-start 0%, @color-bg-dark-middle 50%, @color-bg-dark-end 100%);
 }
 
 .card {
-    width: 520px;
-    padding: 40px 46px;
-
+    width: 100%;
+    max-width: 560px;
+    padding: 30px 28px;
     border-radius: 16px !important;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
-
-    box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.38);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 60px rgba(2, 6, 23, 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 46px rgba(2, 6, 23, 0.45);
 }
 
 .title {
     text-align: center;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
-    color: #eef2ff;
-    margin-bottom: 26px;
+    color: @color-text-light;
+    margin-bottom: 22px;
 }
 
 .button {
@@ -50,92 +49,143 @@
 }
 
 :global {
+    .ant-form-item {
+        margin-bottom: 16px;
+    }
+
+    .ant-form-item-label>label {
+        color: rgba(230, 238, 248, 0.94);
+        font-weight: 600;
+    }
 
     .ant-input,
     .ant-input-password,
+    .ant-input-affix-wrapper,
     .ant-select-selector {
         height: 44px !important;
-        border-radius: 12px !important;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        color: #e6eef8;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        color: rgba(230, 238, 248, 0.92) !important;
         width: 100% !important;
     }
 
+    .ant-input,
+    .ant-input-affix-wrapper {
+        padding: 0 12px !important;
+    }
+
+    .ant-input-affix-wrapper .ant-input {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        height: auto !important;
+        box-shadow: none !important;
+    }
+
+    .ant-input-affix-wrapper:hover,
+    .ant-input-affix-wrapper-focused,
+    .ant-input:hover,
+    .ant-select:not(.ant-select-disabled):hover .ant-select-selector,
+    .ant-select-focused .ant-select-selector {
+        border-color: @primary-color !important;
+    }
+
     .ant-input::placeholder,
-    .ant-input-password::placeholder {
+    .ant-input-affix-wrapper input::placeholder,
+    .ant-select-selection-placeholder {
         color: rgba(230, 238, 248, 0.5);
     }
 
     .ant-input:focus,
-    .ant-input-password:focus,
+    .ant-input-affix-wrapper-focused,
     .ant-select-focused .ant-select-selector {
         border-color: @primary-color !important;
         box-shadow: 0 6px 20px rgba(91, 140, 255, 0.12) !important;
     }
 
-    .ant-form-item {
-        margin-bottom: 18px;
+    .ant-select-selection-item {
+        color: rgba(230, 238, 248, 0.92) !important;
     }
 
-    .ant-input-affix-wrapper {
-        display: flex;
-        align-items: center;
+    .ant-input-affix-wrapper .ant-input-suffix,
+    .ant-input-password-icon {
+        color: rgba(230, 238, 248, 0.72);
     }
 
-    .ant-input-affix-wrapper .ant-input {
-        padding-right: 44px;
+    .ant-input:-webkit-autofill,
+    .ant-input:-webkit-autofill:hover,
+    .ant-input:-webkit-autofill:focus,
+    .ant-input-affix-wrapper input:-webkit-autofill,
+    .ant-input-affix-wrapper input:-webkit-autofill:hover,
+    .ant-input-affix-wrapper input:-webkit-autofill:focus {
+        -webkit-text-fill-color: rgba(230, 238, 248, 0.92) !important;
+        transition: background-color 99999s ease-in-out 0s;
+        -webkit-box-shadow: 0 0 0px 1000px rgba(7, 16, 40, 0.35) inset !important;
+        box-shadow: 0 0 0px 1000px rgba(7, 16, 40, 0.35) inset !important;
+        caret-color: rgba(230, 238, 248, 0.92) !important;
     }
 
-    .ant-input-affix-wrapper {
-        position: relative;
-        width: 100% !important;
-        display: flex !important;
-        align-items: center;
-        padding: 0 !important;
+    .ant-select-dropdown {
+        background: rgba(7, 16, 40, 0.98) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 10px 26px rgba(2, 6, 23, 0.45) !important;
     }
 
-    .ant-input-affix-wrapper .ant-input {
-        flex: 1 1 auto !important;
-        width: auto !important;
-        padding-right: 48px !important;
-        display: block !important;
+    .ant-select-item {
+        color: rgba(230, 238, 248, 0.9) !important;
+        border-radius: 6px !important;
+        margin: 2px 4px !important;
     }
 
-    .ant-input-suffix,
-    .ant-input-affix-wrapper .ant-input-suffix {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: auto;
+    .ant-select-item-option-active {
+        background: rgba(91, 140, 255, 0.2) !important;
     }
 
-    /* ensure form controls take full width */
-    .ant-form-item-control,
-    .ant-form-item-control-input,
-    .ant-form-item-control-input-content {
-        width: 100% !important;
-    }
-
-    .ant-input-suffix,
-    .ant-input-affix-wrapper .ant-input-suffix {
-        right: 12px;
-    }
-
-    /* make affix wrapper full width so input covers entire form width */
-    .ant-input-affix-wrapper {
-        width: 100% !important;
-    }
-
-    .ant-form-item-control-input-content>.ant-input-affix-wrapper {
-        width: 100% !important;
+    .ant-select-item-option-selected {
+        background: rgba(91, 140, 255, 0.3) !important;
+        color: #ffffff !important;
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: @bp-tablet-sm-min) and (max-width: @bp-tablet-lg-max) {
     .card {
-        width: 100%;
-        padding: 26px 18px;
+        max-width: 520px;
+        padding: 26px 22px;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: @bp-mobile-max) {
+    .container {
+        min-height: calc(100vh - 56px);
+        padding: 14px 10px;
+        align-items: center;
+    }
+
+    .card {
+        max-width: 440px;
+        padding: 16px 12px;
+        border-radius: 12px !important;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+
+    :global {
+
+        .ant-input,
+        .ant-input-password,
+        .ant-input-affix-wrapper,
+        .ant-select-selector {
+            height: 40px !important;
+            font-size: 14px !important;
+        }
     }
 }

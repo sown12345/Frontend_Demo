@@ -30,7 +30,6 @@ export default function AvatarUploader({ avatar, onUpload, loading = false }: Av
             const formData = new FormData();
             formData.append('avatar', file);
             await onUpload(formData);
-            message.success('Cập nhật ảnh đại diện thành công');
         } catch (error) {
             const err = error as Error;
             message.error(err.message || 'Tải ảnh thất bại');
@@ -41,7 +40,13 @@ export default function AvatarUploader({ avatar, onUpload, loading = false }: Av
         return false;
     };
 
-    const avatarUrl = avatar ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/uploads/${avatar}` : undefined;
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    const serverOrigin = apiBaseUrl.replace(/\/api\/?$/, '');
+    const avatarUrl = avatar
+        ? avatar.startsWith('http://') || avatar.startsWith('https://')
+            ? avatar
+            : `${serverOrigin}/uploads/${avatar}`
+        : undefined;
 
     return (
         <div className={styles.avatarWrapper}>

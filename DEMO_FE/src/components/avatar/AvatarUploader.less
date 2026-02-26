@@ -1,4 +1,6 @@
-@primary-color: #5b8cff;
+@import '../../styles/tokens.less';
+
+@primary-color: @color-primary;
 
 .avatarWrapper {
     display: flex;
@@ -11,7 +13,7 @@
     padding: 6px;
     border-radius: 50%;
     background: linear-gradient(135deg, @primary-color 0%, #8a63d2 100%);
-    box-shadow: 0 8px 20px rgba(11, 19, 40, 0.6);
+    box-shadow: 0 8px 20px rgba(30, 41, 59, 0.16);
 }
 
 .avatarBox :global(.ant-avatar) {

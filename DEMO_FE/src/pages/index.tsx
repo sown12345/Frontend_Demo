@@ -7,7 +7,7 @@ export default function Home() {
     const token = getToken(); // Đọc từ cookie thay vì localStorage
 
     if (token) {
-      history.push('/profile');
+      history.push('/dashboard');
     } else {
       history.push('/login');
     }
