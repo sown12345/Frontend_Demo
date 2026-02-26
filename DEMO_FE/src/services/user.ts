@@ -1,12 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { publicAPI, privateAPI } from '@/utils/axiosInstance';
-import {
-    LoginRequest,
-    RegisterRequest,
-    UpdateProfileRequest,
-    ApiResponse,
-    User
-} from '@/types';
+import { LoginRequest, RegisterRequest, UpdateProfileRequest, ApiResponse, User } from '@/types';
 
 export const registerAPI = (data: RegisterRequest): Promise<AxiosResponse<ApiResponse<User>>> =>
     publicAPI.post('/register', data);

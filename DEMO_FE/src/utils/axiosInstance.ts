@@ -15,6 +15,7 @@ export const publicAPI: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    method: 'post', // Mặc định là POST, có thể override khi gọi API khác
 });
 
 /**

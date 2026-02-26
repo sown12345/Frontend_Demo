@@ -26,6 +26,7 @@
     "axios": "^1.13.5",
     "react": "17.x",
     "react-dom": "17.x",
+    "redux-saga": "^1.4.2",
     "umi": "^3.5.43"
   },
   "devDependencies": {
@@ -33,10 +34,10 @@
     "@types/react-dom": "^17.0.0",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.5.43",
+    "cross-env": "^7.0.3",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "typescript": "^4.1.2",
-    "yorkie": "^2.0.0",
-    "cross-env": "^7.0.3"
+    "yorkie": "^2.0.0"
   }
 }

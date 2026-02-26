@@ -1,102 +1,88 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '@/services/user';
-import { setToken, getToken, removeToken } from '@/utils/auth';
-import { handleApiError } from '@/utils/errorHandler';
-import {
-    RegisterRequest,
-    LoginRequest,
-    UpdateProfileRequest,
-    User,
-    UserState,
-} from '@/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getToken, removeToken } from '@/utils/auth';
+import { RegisterRequest, LoginRequest, UpdateProfileRequest, User, UserState } from '@/types';
 
-// REGISTER
-export const register = createAsyncThunk<User, RegisterRequest, { rejectValue: string }>(
-    'user/register',
-    async (data, { rejectWithValue }) => {
-        try {
-            const res = await api.registerAPI(data);
-            return res.data.data as User;
-        } catch (err) {
-            const errorInfo = handleApiError(err);
-            return rejectWithValue(errorInfo.message);
-        }
-    }
-);
-
-// LOGIN
-export const login = createAsyncThunk<string, LoginRequest, { rejectValue: string }>(
-    'user/login',
-    async (data, { rejectWithValue }) => {
-        try {
-            const res = await api.loginAPI(data);
-            // backend wraps payload as { status, message, data }
-            const token = res.data?.data?.token;
-            if (!token) throw new Error('Token not found in response');
-            setToken(token); // Lưu vào cookie thay vì localStorage
-            return token;
-        } catch (err) {
-            const errorInfo = handleApiError(err);
-            return rejectWithValue(errorInfo.message);
-        }
-    }
-);
-
-// FETCH PROFILE
-export const fetchProfile = createAsyncThunk<User, void, { rejectValue: string }>(
-    'user/fetchProfile',
-    async (_, { rejectWithValue }) => {
-        try {
-            const res = await api.getProfileAPI();
-            return res.data?.data as User;
-        } catch (err) {
-            const errorInfo = handleApiError(err);
-            return rejectWithValue(errorInfo.message);
-        }
-    }
-);
-
-// UPDATE PROFILE
-export const updateProfile = createAsyncThunk<User, UpdateProfileRequest, { rejectValue: string }>(
-    'user/updateProfile',
-    async (data, { rejectWithValue }) => {
-        try {
-            const res = await api.updateProfileAPI(data);
-            return res.data?.data as User;
-        } catch (err) {
-            const errorInfo = handleApiError(err);
-            return rejectWithValue(errorInfo.message);
-        }
-    }
-);
-
-// UPLOAD AVATAR
-export const uploadAvatar = createAsyncThunk<User, FormData, { rejectValue: string }>(
-    'user/uploadAvatar',
-    async (formData, { rejectWithValue }) => {
-        try {
-            const res = await api.uploadAvatarAPI(formData);
-            return res.data?.data as User;
-        } catch (err) {
-            const errorInfo = handleApiError(err);
-            return rejectWithValue(errorInfo.message);
-        }
-    }
-);
-
-
+// User slice chỉ quản lý state đồng bộ.
+// Side-effects (API, redirect, toast) được xử lý trong saga.
 const userSlice = createSlice({
     name: 'user',
     initialState: {
+        // Khởi tạo token từ cookie để giữ trạng thái đăng nhập sau khi reload.
         token: getToken(),
         profile: null,
+        profileStatus: 'idle',
         isLoading: false,
         error: null,
     } as UserState,
     reducers: {
+        // Pattern chung: request bật loading, success cập nhật dữ liệu, failure cập nhật lỗi.
+        registerRequest(state, _action: PayloadAction<RegisterRequest>) {
+            state.isLoading = true;
+            state.error = null;
+        },
+        registerSuccess(state) {
+            state.isLoading = false;
+        },
+        registerFailure(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.error = action.payload || 'Register failed';
+        },
+        loginRequest(state, _action: PayloadAction<LoginRequest>) {
+            state.isLoading = true;
+            state.error = null;
+        },
+        loginSuccess(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.token = action.payload;
+        },
+        loginFailure(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.error = action.payload || 'Login failed';
+        },
+        fetchProfileRequest(state) {
+            state.isLoading = true;
+            state.profileStatus = 'loading';
+            state.error = null;
+        },
+        fetchProfileSuccess(state, action: PayloadAction<User>) {
+            state.isLoading = false;
+            state.profile = action.payload;
+            state.profileStatus = 'succeeded';
+        },
+        fetchProfileFailure(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.profileStatus = 'failed';
+            state.error = action.payload || 'Fetch profile failed';
+        },
+        updateProfileRequest(state, _action: PayloadAction<UpdateProfileRequest>) {
+            state.isLoading = true;
+            state.error = null;
+        },
+        updateProfileSuccess(state, action: PayloadAction<User>) {
+            state.isLoading = false;
+            state.profile = action.payload;
+        },
+        updateProfileFailure(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.error = action.payload || 'Update failed';
+        },
+        uploadAvatarRequest(state, _action: PayloadAction<FormData>) {
+            state.isLoading = true;
+            state.error = null;
+        },
+        uploadAvatarSuccess(state, action: PayloadAction<User>) {
+            state.isLoading = false;
+            state.profile = action.payload;
+        },
+        uploadAvatarFailure(state, action: PayloadAction<string>) {
+            state.isLoading = false;
+            state.error = action.payload || 'Upload avatar failed';
+        },
+        // Logout reset state user và xóa token khỏi cookie.
         logout(state) {
             state.token = null;
             state.profile = null;
+            state.profileStatus = 'idle';
             state.error = null;
             removeToken();
         },
@@ -104,83 +90,25 @@ const userSlice = createSlice({
             state.error = null;
         },
     },
-
-    extraReducers: (builder) => {
-        // Register
-        builder
-            .addCase(register.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(register.fulfilled, (state) => {
-                state.isLoading = false;
-            })
-            .addCase(register.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload || 'Register failed';
-            });
-
-        // Login
-        builder
-            .addCase(login.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(login.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.token = action.payload;
-            })
-            .addCase(login.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload || 'Login failed';
-            });
-
-        // Fetch Profile
-        builder
-            .addCase(fetchProfile.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(fetchProfile.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.profile = action.payload;
-            })
-            .addCase(fetchProfile.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload || 'Fetch profile failed';
-            });
-
-        // Update Profile
-        builder
-            .addCase(updateProfile.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(updateProfile.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.profile = action.payload;
-            })
-            .addCase(updateProfile.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload || 'Update failed';
-            });
-
-        // Upload Avatar
-        builder
-            .addCase(uploadAvatar.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(uploadAvatar.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.profile = action.payload;
-            })
-            .addCase(uploadAvatar.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload || 'Upload avatar failed';
-            });
-    },
 });
 
-export const { logout, clearError } = userSlice.actions;
+export const {
+    registerRequest,
+    registerSuccess,
+    registerFailure,
+    loginRequest,
+    loginSuccess,
+    loginFailure,
+    fetchProfileRequest,
+    fetchProfileSuccess,
+    fetchProfileFailure,
+    updateProfileRequest,
+    updateProfileSuccess,
+    updateProfileFailure,
+    uploadAvatarRequest,
+    uploadAvatarSuccess,
+    uploadAvatarFailure,
+    logout,
+    clearError,
+} = userSlice.actions;
 export default userSlice.reducer;
